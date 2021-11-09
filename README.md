@@ -24,14 +24,14 @@ require('laravel-mix-imagemin');
 
 mix
     .js('resources/js/app.js', 'public/js')
-    .imagemin('img/*');
+    .imagemin([{from:'img', to: 'img'}]);
 ```
 
 ## Configuration
 
 This extension uses the webpack [CopyPlugin](https://github.com/webpack-contrib/copy-webpack-plugin) and [ImageminPlugin](https://github.com/Klathmon/imagemin-webpack-plugin) to minify any images. The `mix.imagemin` function accepts 3 parameters. The first two are `patterns` and `copyOptions`, which are passed directly to the CopyPlugin's `patterns` and `options` parameters respectively. The third parameter is `imageminOptions`, which is passed to the ImageminPlugin's `options` parameter.
 
-The `patterns` parameter is automatically converted to an array, so you can just pass a `string` or `object`. the `copyOptions` and `imageminOptions` parameters are optional.
+The `patterns` parameter is an array of CopyPlugin patterns. The `copyOptions` and `imageminOptions` parameters are optional.
 
 For all available options, see [CopyPlugin options](https://github.com/webpack-contrib/copy-webpack-plugin#options) and [ImageminPlugin options](https://github.com/Klathmon/imagemin-webpack-plugin#api).
 
@@ -45,9 +45,13 @@ require('laravel-mix-imagemin');
 mix
     .js('resources/js/app.js', 'public/js')
     .imagemin(
-        'img/**.*',
+        [
+          {from: 'img', to: 'img', context: 'resources'},
+        ],
         {
-            context: 'resources',
+            from: 'img',
+            to: 'another-image-path',
+            context: 'resources'
         },
         {
             optipng: {
